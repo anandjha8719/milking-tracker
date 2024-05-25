@@ -2,25 +2,28 @@ import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import classicalMusic from "../assets/scott.mp3"; // Adjust path as necessary
+import Popup from "./popup.jsx";
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-//   height: 100vh;
+  height: 100vh;
   padding: 1rem;
+  margin-top: 3rem;
 `;
 
 const Button = styled.button`
   padding: 1rem 2rem;
   font-size: 1.5rem;
-  background-color: #40A578;
+  background-color: #006769;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   margin-bottom: 1rem;
+  outline: none;
 
   &:disabled {
     background-color: #ccc;
@@ -38,6 +41,7 @@ const Home = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [time, setTime] = useState(0);
   const [intervalId, setIntervalId] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
   const audioRef = useRef(new Audio(classicalMusic));
 
   useEffect(() => {
@@ -75,8 +79,10 @@ const Home = () => {
     setIsMilking(false);
     setIsPaused(false);
     setTime(0);
-    // Prompt for milk quantity and store the session in localStorage
-    const milkQuantity = prompt("Enter the quantity of milk (in liters):");
+    setShowPopup(true);
+  };
+
+  const handleSave = (milkQuantity) => {
     const session = {
       date: new Date().toLocaleDateString(),
       startTime: new Date().toLocaleTimeString(),
@@ -98,7 +104,16 @@ const Home = () => {
         {isMilking ? (isPaused ? "Resume" : "Pause") : "Start Milking"}
       </Button>
       {isMilking && <Button onClick={handleStop}>Stop</Button>}
-      <Link to="/history">View Milking History</Link>
+      <Link to="/history" style={{ color: "#006769" }}>
+        View Milking History
+      </Link>
+      {showPopup ? (
+        <Popup
+          isVisible={showPopup}
+          onClose={() => setShowPopup(false)}
+          onSave={handleSave}
+        />
+      ) : null}
     </Container>
   );
 };

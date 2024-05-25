@@ -11,6 +11,7 @@ const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
   margin-top: 1rem;
+  margin-bottom: 1rem;
 
   th,
   td {
@@ -19,7 +20,7 @@ const Table = styled.table`
   }
 
   th {
-    background-color: #4caf50;
+    background-color: #006769;
     color: white;
   }
 `;

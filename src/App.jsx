@@ -7,7 +7,7 @@ function App() {
   return (
     <Router>
       <Navbar />
-      <div style={{ width: "100vw" }}>
+      <div style={{ width: "100vw", marginTop: "60px" }}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/history" element={<History />} />

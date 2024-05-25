@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import cowIcon from "../assets/cow-icon.svg"; // Replace with the actual path to the cow icon
+import { Link } from "react-router-dom";
 
 const NavbarContainer = styled.div`
   position: fixed;
@@ -22,7 +23,9 @@ const Icon = styled.img`
 const Navbar = () => {
   return (
     <NavbarContainer>
-      <Icon src={cowIcon} alt="Cow Icon" />
+      <Link to="/">
+        <Icon src={cowIcon} alt="Cow Icon" />
+      </Link>
     </NavbarContainer>
   );
 };
