@@ -26,6 +26,8 @@ We chose Vite for this project because of its simplicity and speed, which are id
    ```sh
    git clone https://github.com/yourusername/milking-app.git
    cd milking-app
+   npm install or yarn install
+   npm run dev or yarn dev
    ```
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
