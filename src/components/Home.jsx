@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import classicalMusic from "../assets/scott.mp3"; // Adjust path as necessary
+import classicalMusic from "../assets/scott.mp3";
+import music2 from "../assets/After.mp3";
+import music3 from "../assets/Moon.mp3";
 import Popup from "./popup.jsx";
 
 const Container = styled.div`
@@ -22,7 +24,7 @@ const Button = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   outline: none;
 
   &:disabled {
@@ -35,22 +37,31 @@ const Timer = styled.div`
   font-size: 4rem;
   margin-bottom: 1rem;
 `;
-
 const Home = () => {
   const [isMilking, setIsMilking] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [time, setTime] = useState(0);
   const [intervalId, setIntervalId] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
-  const audioRef = useRef(new Audio(classicalMusic));
+
+  const audioTracks = [classicalMusic, music2, music3];
+  const audioRef = useRef(new Audio());
 
   useEffect(() => {
+    const playRandomTrack = () => {
+      const randomIndex = Math.floor(Math.random() * audioTracks.length);
+      audioRef.current.src = audioTracks[randomIndex];
+      audioRef.current.play();
+    };
+
     if (isMilking && !isPaused) {
       const id = setInterval(() => {
         setTime((prevTime) => prevTime + 1);
       }, 1000);
       setIntervalId(id);
-      audioRef.current.play();
+      playRandomTrack();
+
+      audioRef.current.onended = playRandomTrack;
     } else if (isPaused) {
       clearInterval(intervalId);
       audioRef.current.pause();
@@ -80,6 +91,7 @@ const Home = () => {
     setIsPaused(false);
     setTime(0);
     setShowPopup(true);
+    audioRef.current.onended = null;
   };
 
   const handleSave = (milkQuantity) => {
