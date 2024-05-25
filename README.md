@@ -1,4 +1,32 @@
-# React + Vite
+# Milking App - Vite + React
+
+## Hosted Link
+
+[Milking App](https://milking-tracker-three.vercel.app/)
+
+## Introduction
+
+The Milking App is a mobile-first web application designed to help dairy farmers track their milking sessions while incorporating music to enhance cattle yield. This app uses Vite and React for a fast and modern development experience.
+
+## Why Vite?
+
+We chose Vite for this project because of its simplicity and speed, which are ideal for small projects. Vite provides a rapid development environment with minimal configuration, making it a perfect fit for this application.
+
+## Run Locally
+
+### Prerequisites
+
+- Node.js (https://nodejs.org)
+- npm (comes with Node.js) or Yarn (https://yarnpkg.com)
+
+### Steps
+
+1. **Clone the repository**
+
+   ```sh
+   git clone https://github.com/yourusername/milking-app.git
+   cd milking-app
+   ```
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
