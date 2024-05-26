@@ -31,14 +31,15 @@ body {
   /* background: linear-gradient(90deg, #f2f8d1 0%, #d9f5ff 100%); */
 }
 
-body::-webkit-scrollbar {
-  display: none;
-}
+
 
 /* Hide scrollbar for IE, Edge and Firefox */
 body {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+}
+body::-webkit-scrollbar {
+  display: none;
 }
 
 /* Optional: Ensure no overflow */

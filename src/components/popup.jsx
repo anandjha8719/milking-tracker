@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import PropTypes from "prop-types";
+
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -56,6 +57,11 @@ const Button = styled.button`
   border-radius: 5px;
   cursor: pointer;
   margin-top: 1rem;
+  margin-right: ${(props) => (props.cancel ? "1rem" : "0")};
+
+  &:hover {
+    background-color: ${(props) => (props.cancel ? "#cc0000" : "#004c4c")};
+  }
 `;
 
 const Input = styled.input`
@@ -74,7 +80,7 @@ const Popup = ({ isVisible, onClose, onSave }) => {
       onSave(milkQuantity);
       onClose();
     } else {
-      alert("Please Enter the milk quantity");
+      alert("Please enter the milk quantity");
     }
   };
 
@@ -88,7 +94,12 @@ const Popup = ({ isVisible, onClose, onSave }) => {
           onChange={(e) => setMilkQuantity(e.target.value)}
           placeholder="Liters"
         />
-        <Button onClick={handleSave}>Save</Button>
+        <div>
+          <Button cancel onClick={onClose}>
+            Cancel
+          </Button>
+          <Button onClick={handleSave}>Save</Button>
+        </div>
       </PopupContainer>
     </Overlay>
   );

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import classicalMusic from "../assets/scott.mp3";
 import music2 from "../assets/After.mp3";
 import music3 from "../assets/Moon.mp3";
@@ -37,12 +37,15 @@ const Timer = styled.div`
   font-size: 4rem;
   margin-bottom: 1rem;
 `;
+
 const Home = () => {
   const [isMilking, setIsMilking] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [time, setTime] = useState(0);
   const [intervalId, setIntervalId] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
+  const [pendingNavigation, setPendingNavigation] = useState(false);
+  const navigate = useNavigate();
 
   const audioTracks = [classicalMusic, music2, music3];
   const audioRef = useRef(new Audio());
@@ -71,7 +74,11 @@ const Home = () => {
       audioRef.current.currentTime = 0;
     }
 
-    return () => clearInterval(intervalId);
+    return () => {
+      clearInterval(intervalId);
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    };
   }, [isMilking, isPaused]);
 
   const handleStartPause = () => {
@@ -89,7 +96,6 @@ const Home = () => {
   const handleStop = () => {
     setIsMilking(false);
     setIsPaused(false);
-    setTime(0);
     setShowPopup(true);
     audioRef.current.onended = null;
   };
@@ -97,16 +103,42 @@ const Home = () => {
   const handleSave = (milkQuantity) => {
     const session = {
       date: new Date().toLocaleDateString(),
-      startTime: new Date().toLocaleTimeString(),
-      endTime: new Date(
-        new Date().getTime() + time * 1000
+      startTime: new Date(
+        new Date().getTime() - time * 1000
       ).toLocaleTimeString(),
+      endTime: new Date().toLocaleTimeString(),
       duration: time,
       milk: milkQuantity,
     };
     const history = JSON.parse(localStorage.getItem("milkingHistory")) || [];
     history.push(session);
     localStorage.setItem("milkingHistory", JSON.stringify(history));
+    setTime(0); // Reset the timer
+    setShowPopup(false);
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+    if (pendingNavigation) {
+      setPendingNavigation(false);
+      navigate("/history");
+    }
+  };
+
+  const handleCancel = () => {
+    setShowPopup(false);
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+    if (pendingNavigation) {
+      setPendingNavigation(false);
+      navigate("/history");
+    }
+  };
+
+  const handleNavigation = (e) => {
+    if (isMilking || isPaused) {
+      e.preventDefault();
+      setShowPopup(true);
+      setPendingNavigation(true);
+    }
   };
 
   return (
@@ -116,16 +148,20 @@ const Home = () => {
         {isMilking ? (isPaused ? "Resume" : "Pause") : "Start Milking"}
       </Button>
       {isMilking && <Button onClick={handleStop}>Stop</Button>}
-      <Link to="/history" style={{ color: "#006769" }}>
+      <Link
+        to="/history"
+        style={{ color: "#006769" }}
+        onClick={handleNavigation}
+      >
         View Milking History
       </Link>
-      {showPopup ? (
+      {showPopup && (
         <Popup
           isVisible={showPopup}
-          onClose={() => setShowPopup(false)}
+          onClose={handleCancel}
           onSave={handleSave}
         />
-      ) : null}
+      )}
     </Container>
   );
 };
